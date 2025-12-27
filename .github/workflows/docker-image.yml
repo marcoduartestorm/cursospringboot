@@ -24,15 +24,3 @@ jobs:
     - name: Push da imagem
       run: |
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/oauth2
-
-    - name: Deploy no servidor via SSH
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        script: |
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/oauth2
-          docker stop oauth2 || true
-          docker rm oauth2 || true
-          docker run -d --name oauth2 -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/oauth2
